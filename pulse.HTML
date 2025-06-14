@@ -1,18 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Tech Site</title>
+  <title>TechEdu Site</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, textarea, button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 300px;
+    }
+    #msg {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
   <h1>Add New Topic</h1>
 
   <form name="submit-to-google-sheet">
-    <input type="text" name="title" placeholder="Enter Topic Title" required><br><br>
-    <textarea name="content" placeholder="Write content here" required></textarea><br><br>
-    <input type="text" name="category" placeholder="Category" required><br><br>
+    <input type="text" name="title" placeholder="Enter Topic Title" required>
+    <textarea name="content" placeholder="Write content here" required></textarea>
+    <input type="text" name="category" placeholder="Category" required>
     <button type="submit">Submit</button>
     <p id="msg"></p>
+  </form>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx2h54L7uUnrSansorYEQXBiqTbCwSn5q7_0RTWfZedFJwwun8Y8ziubuakxo6YiyCz/exec";
+    const form = document.forms["submit-to-google-sheet"];
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const title = form.title.value;
+      const content = form.content.value;
+      const category = form.category.value;
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({ title, content, category }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        msg.innerHTML = "✅ Topic Saved!";
+        form.reset();
+        setTimeout(() => msg.innerHTML = "", 3000);
+      })
+      .catch(error => {
+        msg.innerHTML = "❌ Error!";
+        console.error('Error!', error.message);
+      });
+    });
+  </script>
+
+</body>
+</html>
+
   </form>
 
   <!--👇 यहाँ JavaScript जोड़ो -->
