@@ -1,25 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Educational content about Computers and Mobiles">
-  <meta name="keywords" content="Computer tips, Mobile guide, Tech blog, Education">
-  <meta name="author" content="Your Name">
-  <title>TechEdu World</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-    header {
-      background-color: #007bff;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+  <title>My Tech Site</title>
+</head>
+<body>
+
+  <h1>Add New Topic</h1>
+
+  <form name="submit-to-google-sheet">
+    <input type="text" name="title" placeholder="Enter Topic Title" required><br><br>
+    <textarea name="content" placeholder="Write content here" required></textarea><br><br>
+    <input type="text" name="category" placeholder="Category" required><br><br>
+    <button type="submit">Submit</button>
+    <p id="msg"></p>
+  </form>
+
+  <!--👇 यहाँ JavaScript जोड़ो -->
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx2h54L7uUnrSansorYEQXBiqTbCwSn5q7_0RTWfZedFJwwun8Y8ziubuakxo6YiyCz/exec";
+
+    const form = document.forms["submit-to-google-sheet"];
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const title = form.title.value;
+      const content = form.content.value;
+      const category = form.category.value;
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({ title, content, category }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        msg.innerHTML = "✅ Topic Saved!";
+        form.reset();
+        setTimeout(() => msg.innerHTML = "", 3000);
+      })
+      .catch(error => {
+        msg.innerHTML = "❌ Error!";
+        console.error('Error!', error.message);
+      });
+    });
+  </script>
+
+</body>
+</html>
+
     nav {
       background-color: #333;
       overflow: hidden;
